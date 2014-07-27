@@ -1,0 +1,23 @@
+1. Install new OS X Lion
+2. upgrade it to Mavericks
+3. install [homebrew][brew]
+  * installs git version 1.9.3?
+4. install command line tools
+
+```
+$ brew doctor
+Your system is ready to brew.
+```
+
+5. install brew packages
+	1. update git to 2.0.3+
+	2.
+
+6. install [homebrew-cask][cask]
+```
+$ brew install caskroom/cask/brew-cask
+$ brew cask update # creates Caskroom, requiring admin password.
+```
+
+  [brew]: http://brew.sh
+  [cask]: https://github.com/caskroom/homebrew-cask
