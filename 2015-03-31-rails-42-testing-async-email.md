@@ -14,6 +14,23 @@ So for the purpose of this article, we'll assume you have:
   * Active Job set up to use a queueing backend (e.g. Sidekiq, Resque, etc.)
   * A Mailer
 
+Any Mailer should work with the concepts described here, but we'll use this welcome email to make keep our examples pragmatic:
+
+```ruby
+#app/mailers/user_mailer.rb
+
+class UserMailer < ActionMailer::Base
+  default from: 'email@example.com'
+
+  def welcome_email(user:)
+    mail(
+      to: user.email,
+      subject: "Hi #{user.first_name}, and welcome!"
+    )
+  end
+end
+```
+
 To keep things simple and focus on what's important, we want to send the user a welcome email once they join.
 
 This is just like in [the Rails guides mailer example][calling-the-mailer]:
