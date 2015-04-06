@@ -98,6 +98,74 @@ test 'email is delivered with expected content' do
 end
 ```
 
+### Shorten the Feedback Loop
+
+We've touched functional testing so far, ensuring our controller is behaving as expected. But what about unit testing our mailers to shorten the feedback loop and get quick insights when the changes in our code could break the emails that we send out?
+
+[The Rails guide on testing][testing-rails-mailers] suggests using fixtures here, but I find them to be too brittle. Especially in the beginning, when still experimenting with the design or the content of the email, a change can quickly render them outdated and make our tests red. Instead, my preference is to use `assert_match` to focus on key elements that should be part of the email's body.
+
+For this purpose and more (like abstracting away the logic of handling emails that are multipart or not) we can build our custom assertions. This enables us to extend the [standard MiniTest assertions][minitest-assertions] or [the Rails specific assertions][rails-assertions]. It is also a good example of creating our own Domain Specific Language (DSL) for testing.
+
+Let's create a `shared` folder within the `test` one to host our `SharedMailerTests` module. Our custom assert can look something like this:
+
+```ruby
+# /test/shared/shared_mailer_tests.rb
+
+module SharedMailerTests
+  …
+  def assert_email_body_matches(matcher:, email:)
+    if email.multipart?
+      %w(text html).each do |part|
+        assert_match matcher, email.send("#{part}_part").body.to_s
+      end
+    else
+      assert_match matcher, email.body.to_s
+    end
+  end
+end
+```
+
+Next, we need to make our mailer tests aware about this custom assertion, so let's mix it in `ActionMailer::TestCase`. We can do this in a similar fashion to the way we included `ActiveJob::TestHelper` in `ActionController::TestCase` earlier:
+
+```ruby
+# test/test_helper.rb
+
+require 'shared/shared_mailer_tests'
+…
+class ActionMailer::TestCase
+  include SharedMailerTests
+  …
+end
+```
+
+Note that we first need to require our `shared_mailer_tests` in the `test_helper`.
+
+With this in place, we can now ensure that our emails contain the key elements that we expect. Imagine we want to make sure the URL we send the user contains some specific UTM parameters for tracking. We can now use our custom assertion in conjunction with our old friend `perform_enqueued_jobs` like so:
+
+```ruby
+# test/mailers/user_mailer_test.rb
+
+class ToolMailerTest < ActionMailer::TestCase
+  …
+  test 'emailed URL contains expected UTM params' do
+    UserMailer.welcome_email(user: @user).deliver_later
+
+    perform_enqueued_jobs do
+      refute ActionMailer::Base.deliveries.empty?
+
+      delivered_email = ActionMailer::Base.deliveries.last
+      %W(
+        utm_campaign=#{@campaign}
+        utm_content=#{@content}
+        utm_medium=email
+        utm_source=mandrill
+      ).each do |utm_param|
+        assert_email_body_matches utm_param, delivered_email
+      end
+    end
+  end
+```
+
 ## Conclusion
 
 Having ActionMailer standing on the shoulders of Active Job makes switching from sending emails right away to sending them via the queue as easy as switching `deliver_now` to `deliver_later`.
@@ -117,3 +185,6 @@ P.S. Have you had experience with ActionMailer or Active Job? Any tips? Any gotc
   [assert-enqueued-jobs]: http://api.rubyonrails.org/classes/ActiveJob/TestHelper.html#method-i-assert_enqueued_jobs
   [perform-enqueued-jobs]: http://api.rubyonrails.org/classes/ActiveJob/TestHelper.html#method-i-perform_enqueued_jobs
   [sidekiq]: https://github.com/mperham/sidekiq "Sidekiq: Simple, efficient background processing for Ruby"
+  [testing-rails-mailers]: http://guides.rubyonrails.org/testing.html#testing-your-mailers "Rails Guides: Testing Your Mailers"
+  [minitest-assertions]: http://guides.rubyonrails.org/testing.html#available-assertions "Rails Guides: Available Assertions"
+  [rails-assertions]: http://guides.rubyonrails.org/testing.html#rails-specific-assertions "Rails Guides: Rails Specific Assertions"
