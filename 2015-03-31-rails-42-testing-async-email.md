@@ -2,7 +2,24 @@
 
 Say you're building an app that needs to do send emails. And yes, we agree to never block the controller, so async delivery is the way to go.
 
-The good news is that since Rails 4.2, [sending emails asynchronously][rails-42-async-mail] is easier than ever before. In our app, [Sidekiq][sidekiq] was chosen as the queuing system, but since `ActionMailer#deliver_later` is built on top of `ActiveJob`, the interface is clean and queuing system agnostic. This means that if I wouldn't have just mentioned it you couldn't tell, either form a developer’s perspective, or when it comes to user experience. Active Job does a great job at hiding away all the nitty gritty queue implementation details, such that this works the same way for Resque, Delayed Job or anything else.
+The good news is that since Rails 4.2, [sending emails asynchronously][rails-42-async-mail] is easier than ever before. In our app, [Sidekiq][sidekiq] was chosen as the queuing system, but since `ActionMailer#deliver_later` is built on top of `ActiveJob`, the interface is clean and queuing system agnostic. This means that if I wouldn't have just mentioned it you couldn't tell, either form a developer’s perspective, or when it comes to user experience. Setting up a queuing system is a topic on it's own, and beyond the scope of this article, so…
+
+### Don't Sweat the Small Stuff
+
+In our example, we assume that Sidekiq and its dependencies are properly configured, so the only piece of code that is specific to this scenario is declaring which queue adapter should Active Job use:
+
+```ruby
+# config/application.rb
+
+module OurApp
+  class Application < Rails::Application
+    …
+    config.active_job.queue_adapter = :sidekiq
+  end
+end
+```
+
+Active Job does a great job at hiding away all the nitty gritty queue implementation details, such that this works the same way for Resque, Delayed Job or anything else. So if we were to use Resque instead, the only change we would have to do would be to switch the queue adapter from `:sidekiq` to `:resque`.
 
 ## On the Shoulders of Active Job
 
