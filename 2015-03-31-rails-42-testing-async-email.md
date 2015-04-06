@@ -59,7 +59,7 @@ class UsersController < ApplicationController
   …
   def create
     …
-    # Yes, I prefer the Ruby 2.0+ keyword arguments
+    # Yes, Ruby 2.0+ keyword arguments are preferred
     UserMailer.welcome_email(user: @user).deliver_later
   end
 end
@@ -110,7 +110,7 @@ Assuming our code does what we expect, our test should now be green.
 
 This is good news. We can either move to refactoring our code, adding new functionality, or adding new tests. Let's go with the latter and test if our email is delivered and if it has the expected content.
 
-When delivering emails inline, it was as easy as asserting that we had an extra delivery:
+`ActionMailer` provides us with an array of all the emails sent out with the `delivery_method` option configured to `:test`. We can access it through `ActionMailer::Base.deliveries`. When delivering emails inline, testing that our action was successful and the email actually gets delivered is very easy. All we need to do is to check that our deliveries count was incremented by one upon completing our action. Translating this to MiniTest, it would look like this:
 
 ```ruby
 assert_difference 'ActionMailer::Base.deliveries.size', +1 do
@@ -118,7 +118,7 @@ assert_difference 'ActionMailer::Base.deliveries.size', +1 do
 end
 ```
 
-In our async world, we need first to [`perform_enqueued_jobs`][perform-enqueued-jobs]
+Our tests are happening in real time, but as we agreed in the very beginning of this article to never block the controller and send emails in a background job, we now need to orchestrate everything to ensure our system is deterministic. For this reason, in our async world we need first to execute all enqueued job before we can evaluate their results. To execute the pending ActiveJob jobs we will use [`perform_enqueued_jobs`][perform-enqueued-jobs]:
 
 ```ruby
 test 'email is delivered with expected content' do
