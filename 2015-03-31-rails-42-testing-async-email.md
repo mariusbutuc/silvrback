@@ -1,8 +1,10 @@
 # Testing async emails, the Rails 4.2+ way
 
-Say you're building an app that needs to do send emails. And yes, we agree to never block the controller, so async delivery is the way to go.
+Say you're building an app that needs to do send emails. And yes, we agree to never block the controller, so async delivery is the way to go. So we'll move our code from happening inline to using an asynchronous processing library to handle our jobs in the background.
 
-The good news is that since Rails 4.2, [sending emails asynchronously][rails-42-async-mail] is easier than ever before. In our app, [Sidekiq][sidekiq] was chosen as the queuing system, but since `ActionMailer#deliver_later` is built on top of `ActiveJob`, the interface is clean and agnostic of the asynchronous processing library used. This means that if I wouldn't have just mentioned it you couldn't tell, either form a developer’s perspective, or when it comes to user experience. Setting up a queuing system is a topic on it's own, and beyond the scope of this article, so…
+What do we need to do to be confident that our code behaves as expected upon making this change? We'll use MiniTest (since it ships with Rails) but the concepts presented here can be easily translated to RSpec. Still, can we write our tests the same way, or what idiomatic changes do we need to make? How can we leverage Rails to reduce the complexity of our application as it aims for webscale?
+
+The good news is that since Rails 4.2, [sending emails asynchronously][rails-42-async-mail] is easier than ever before. We'll use [Sidekiq][sidekiq] as the queuing system in our example, but since `ActionMailer#deliver_later` is built on top of `ActiveJob`, the interface is clean and agnostic of the asynchronous processing library used. This means that if I wouldn't have just mentioned it you couldn't tell, either form a developer’s perspective, or when it comes to user experience. Setting up a queuing system is a topic on it's own, and beyond the scope of this article, so…
 
 ### Don't Sweat the Small Stuff
 
