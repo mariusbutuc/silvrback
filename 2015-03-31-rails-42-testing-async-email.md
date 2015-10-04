@@ -1,5 +1,15 @@
 # Testing async emails, the Rails 4.2+ way
 
+![Silvrback blog image sb_float](https://silvrback.s3.amazonaws.com/uploads/9219ebb5-0c0d-4841-b1c1-a6534e29a28e/testing_rails_thumb_medium.jpg)
+
+_Disclaimer:_ These "lab notes" were originally written for and [published on Engine&nbsp;Yard's blog][on-engine-yard] back in April.
+
+While putting them together, valuable feedback was received from [Noah&nbsp;Slater][nslater], These notes were in a rough shape until Noah patiently improved their structure an readability.
+
+Having said that, let's dig in!
+
+---
+
 Say you're building an app that needs to do send emails. And yes, we agree to never block the controller, so async delivery is the way to go. So we'll move our code from happening inline to using an asynchronous processing library to handle our jobs in the background.
 
 What do we need to do to be confident that our code behaves as expected upon making this change? We'll use MiniTest (since it ships with Rails) but the concepts presented here can be easily translated to RSpec. Still, can we write our tests the same way, or what idiomatic changes do we need to make? How can we leverage Rails to reduce the complexity of our application as it aims for webscale?
@@ -15,7 +25,7 @@ In our example, we assume that Sidekiq and its dependencies are properly configu
 
 module OurApp
   class Application < Rails::Application
-    …
+    # …
     config.active_job.queue_adapter = :sidekiq
   end
 end
@@ -58,9 +68,9 @@ This is just like in [the Rails guides mailer example][calling-the-mailer]:
 # app/controllers/users_controller.rb
 
 class UsersController < ApplicationController
-  …
+  # …
   def create
-    …
+    # …
     # Yes, Ruby 2.0+ keyword arguments are preferred
     UserMailer.welcome_email(user: @user).deliver_later
   end
@@ -83,7 +93,7 @@ Here’s how you’d do that:
 require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
-  …
+  # …
   test 'email is enqueued to be delivered later' do
     assert_enqueued_jobs 1 do
       post :create, {…}
@@ -103,9 +113,9 @@ But we can quickly fix this:
 
 class ActionController::TestCase
   include ActiveJob::TestHelper
-  …
+  # …
 end
-…
+# …
 ```
 
 Assuming our code does what we expect, our test should now be green.
@@ -148,7 +158,7 @@ Let's create a `shared` folder within the `test` one to host our `SharedMailerTe
 # /test/shared/shared_mailer_tests.rb
 
 module SharedMailerTests
-  …
+  # …
   def assert_email_body_matches(matcher:, email:)
     if email.multipart?
       %w(text html).each do |part|
@@ -167,10 +177,10 @@ Next, we need to make our mailer tests aware about this custom assertion, so let
 # test/test_helper.rb
 
 require 'shared/shared_mailer_tests'
-…
+# …
 class ActionMailer::TestCase
   include SharedMailerTests
-  …
+  # …
 end
 ```
 
@@ -182,7 +192,7 @@ With this in place, we can now ensure that our emails contain the key elements t
 # test/mailers/user_mailer_test.rb
 
 class ToolMailerTest < ActionMailer::TestCase
-  …
+  # …
   test 'emailed URL contains expected UTM params' do
     UserMailer.welcome_email(user: @user).deliver_later
 
@@ -212,6 +222,8 @@ It can be a little bit tricky to get your tests set up correctly so that they ca
 
 P.S. Have you had experience with ActionMailer or Active Job? Any tips? Any gotchas? Let us know by leaving a comment.
 
+  [on-engine-yard]: https://blog.engineyard.com/2015/testing-async-emails-rails-42 "Engine Yard: Testing async emails, the Rails 4.2+ way"
+  [nslater]: https://twitter.com/nslater "Noah Slater"
   [start-aj]: https://blog.engineyard.com/2014/getting-started-with-active-job "Getting Started With Active Job"
   [tweet-a-wish]: https://twitter.com/mariusbutuc/status/578585047059599361 "Wish it would have touched testing too"
   [rails-42-async-mail]: http://guides.rubyonrails.org/4_2_release_notes.html#asynchronous-mails "Rails 4.2 Release Notes: Asynchronous Mails"
