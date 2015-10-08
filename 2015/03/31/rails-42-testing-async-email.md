@@ -4,7 +4,7 @@
 
 _Disclaimer:_ These "lab notes" were originally written for and [published on Engine&nbsp;Yard's blog][on-engine-yard] back in April.
 
-While putting them together, valuable feedback was received from [Noah&nbsp;Slater][nslater], These notes were in a rough shape until Noah patiently improved their structure an readability.
+While putting them together, [Noah&nbsp;Slater][nslater]'s patient feedback changed the tone and the flow of this article significantly for the better.
 
 Having said that, let's dig in!
 
