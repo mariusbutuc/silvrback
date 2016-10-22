@@ -1,6 +1,6 @@
 # Whiteboarding the LHC
 
-At RailsConf earlier this year, James Edward Gray II talked about [Implementing the LHC on a Whiteboard][whiteboard-lhc]:
+At RailsConf earlier this year, James Edward Gray II talked about [coding interviews, and how to pass them][whiteboard-lhc]:
 
 > If you apply for a programming job, you may be asked to complete a take home code challenge, "pair program" with another developer, and/or sketch out some code on a whiteboard. A lot has been said of the validity and fairness of these tactics, but, company ethics aside, what if you just need a job? In this talk, I'll show you a series of mistakes I have seen in these interview challenges and give you strategies for avoiding them. I'll give recommendations for how you can impress the programmers grading your work and I'll tell you which rules you should bend in your solutions.
 
@@ -9,6 +9,8 @@ Watched [the recording][whiteboard-video] as soon as it became available, and dr
 For the ones I was still wishing, I watched it again, this time jotting down some notes. _Disclaimer:_ almost every word you find below can be either read in the [slide deck][whiteboard-deck] or heard in [the recording][whiteboard-video]. Mine is only the selection of notes, and their organization in a mind map. So, here we go:
 
 ## meta
+
+  ![meta][mindmap-01-meta]
 
   - about
     - coding interviews
@@ -26,6 +28,8 @@ For the ones I was still wishing, I watched it again, this time jotting down som
     - 30% of the rest fail the first technical interview
 
 ## How can you prepare?
+
+  ![How can you prepare?][mindmap-02-prepare]
 
   - study
     - a certain subset of programming knowledge
@@ -89,6 +93,8 @@ For the ones I was still wishing, I watched it again, this time jotting down som
 
 ## Open Source
 
+  ![Open Source][mindmap-03-open-source]
+
   - A small gem is fine
   - most important details are
     - strong README
@@ -98,6 +104,8 @@ For the ones I was still wishing, I watched it again, this time jotting down som
     - documentation
 
 ## What to do while coding?
+
+  ![What to do while coding?][mindmap-04-coding]
 
   - main goal
     - not to be seen as a bad hire
@@ -140,6 +148,11 @@ For the ones I was still wishing, I watched it again, this time jotting down som
       - know five editing shortcuts
       - make one multiple cursors / macros
 
+## Everything connects
+
+Now that we've gone through the parts, here's how everything connects, at least in my head:
+
+![Everything connects][mindmap-05-all]
 
   [whiteboard-lhc]: http://railsconf.com/program#prop_1749
   [whiteboard-video]: http://confreaks.tv/videos/railsconf2016-implementing-the-lhc-on-a-whiteboard
@@ -150,3 +163,8 @@ For the ones I was still wishing, I watched it again, this time jotting down som
   [rubyquiz]: http://rubyquiz.com/
   [cracking]: https://www.amazon.ca/Cracking-Coding-Interview-Programming-Questions/dp/0984782850
   [resubmit-later]: https://youtu.be/g5lWfHEeibs?t=33m
+  [mindmap-01-meta]: https://raw.githubusercontent.com/mariusbutuc/silvrback/master/2016-10-21/whiteboarding_the_lhc_01_meta.png
+  [mindmap-02-prepare]: https://raw.githubusercontent.com/mariusbutuc/silvrback/master/2016-10-21/whiteboarding_the_lhc_02_prepare.png
+  [mindmap-03-open-source]: https://raw.githubusercontent.com/mariusbutuc/silvrback/master/2016-10-21/whiteboarding_the_lhc_03_open_source.png
+  [mindmap-04-coding]: https://raw.githubusercontent.com/mariusbutuc/silvrback/master/2016-10-21/whiteboarding_the_lhc_04_coding.png
+  [mindmap-05-all]: https://raw.githubusercontent.com/mariusbutuc/silvrback/master/2016-10-21/whiteboarding_the_lhc_05_all.png
