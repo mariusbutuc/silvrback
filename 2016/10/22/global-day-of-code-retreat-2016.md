@@ -1,4 +1,4 @@
-Today, the Global Day of Code Retreat—Toronto Edition happened; [#gdcr16][gdcr16-toronto].
+Last Saturday, the Global Day of Code Retreat—Toronto Edition happened; [#gdcr16][gdcr16-toronto].
 
 # Intro
 
@@ -21,10 +21,8 @@ Today, the Global Day of Code Retreat—Toronto Edition happened; [#gdcr16][gdcr
 # First iteration
 
   - language: JavaScript
-  - how do we get [a TDD environment set up][cyber-dojo]?
+  - how do we quickly get a TDD-ready environment set up? [cyber‑dojo.org][cyber-dojo]?
   - only two states: alive or dead
-
-  - http://cyber-dojo.org/kata/edit/B944675F80?avatar=squid
 
 # Second iteration
 
@@ -74,6 +72,17 @@ Today, the Global Day of Code Retreat—Toronto Edition happened; [#gdcr16][gdcr
     - conflicting (design) ideas may arrise; that is OK
     - explore ways to mitigate conflict
 
+# All in all…
+
+To quote Alex, it was great to see so many people that care about what they are doing come together and invest a full Saturday into honing their craft, learning with and from each other, and becoming better.
+
+## _What's an interesting learning you're taking away from today?_
+
+That having and environment set up and ready for development can be as easy as knowing which web app to use—[cyber‑dojo.org][cyber-dojo]
+
+## _What from what you've learned today will you use at work, on Monday?_
+
+From all the pair programming constraints we experimented with and learned about at this Code Retreat, I'm curious to experiment some more with the _evil pair_ approach. What is it? Continue with the ping pong pairing, but when it's your turn to write the implementation, make the tests pass, yet in a way that's different from what your pair intended. I can see this exercise help improve the level of specificity of rhe code, and the way we convey intent. If the code we have now leaves room for misunderstanding, let's surface it.
 
   [gdcr16-toronto]: http://coderetreat.org/events/global-day-of-coderetreat-2016-toronto-canada
   [cyber-dojo]: http://cyber-dojo.org/
